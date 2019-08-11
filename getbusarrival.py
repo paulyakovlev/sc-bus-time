@@ -2,7 +2,7 @@ import csv
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def get_bus_schedule():
@@ -43,17 +43,26 @@ def time_until_next_bus():
     try:
         # getting first entry for now, as it is the next upcoming bus
         time = get_bus_schedule().iat[0, 0]
+        am_or_pm = time[-2:]
+        print(am_or_pm)
+        print(time)
 
         # format the time
         arrival_time = datetime.strptime(time, '%H:%M%p').strftime('%H:%M')
+        arrival_time = datetime.strptime(arrival_time, '%H:%M')
+
+        if (am_or_pm == 'pm'):
+            print('its pm!')
+            arrival_time = arrival_time + timedelta(hours=12)
+
         current_time = datetime.now().strftime('%H:%M')
+        current_time = datetime.strptime(current_time, '%H:%M')
 
         print('arrival time: ', arrival_time)
         print('current time: ', current_time)
 
         # get difference
-        delta = datetime.strptime(
-            arrival_time, '%H:%M') - datetime.strptime(current_time, '%H:%M')
+        delta = arrival_time - current_time
 
         return(delta)
 
