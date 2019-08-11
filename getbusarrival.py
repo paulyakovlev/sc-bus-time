@@ -62,7 +62,10 @@ def time_until_next_bus():
         print('current time: ', current_time)
 
         # get difference
-        delta = arrival_time - current_time
+        if (current_time > arrival_time):
+            delta = 'bus has arrived'
+        else:
+            delta = arrival_time - current_time
 
         return(delta)
 
