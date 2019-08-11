@@ -40,20 +40,8 @@ def get_bus_schedule():
         raise
 
 
-def time_until_next_bus():
+def time_until_next_bus(arrival_time):
     try:
-        # getting first entry for now, as it is the next upcoming bus
-        time = get_bus_schedule().iat[0, 0]
-        am_or_pm = time[-2:]
-
-        # format the time
-        arrival_time = datetime.strptime(time, '%H:%M%p')
-        arrival_time = arrival_time.replace(
-            year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
-
-        if (am_or_pm == 'pm'):
-            arrival_time = arrival_time + timedelta(hours=12)
-
         current_time = datetime.now()
 
         print('arrival time: ', arrival_time)
@@ -72,6 +60,7 @@ def time_until_next_bus():
 def get_delta(arrival, now):
     delta = arrival - now
     delta = delta.days * 24 * 3600 + delta.seconds
+
     return(delta)
 
 
@@ -79,11 +68,25 @@ def remaining_time(seconds):
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
+
     return (days, hours, minutes, seconds)
 
 
+def get_arrival_time(time):
+    time = time.iat[0, 0]
+    am_or_pm = time[-2:]
+    arrival_time = datetime.strptime(time, '%H:%M%p')
+    arrival_time = arrival_time.replace(
+        year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
+
+    if (am_or_pm == 'pm'):
+        arrival_time = arrival_time + timedelta(hours=12)
+
+    return(arrival_time)
+
+
 def main():
-    time_until_next_bus()
+    time_until_next_bus(get_arrival_time(get_bus_schedule()))
 
 
 if __name__ == "__main__":
