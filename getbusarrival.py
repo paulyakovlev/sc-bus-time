@@ -35,19 +35,24 @@ def get_bus_schedule():
 
 def time_until_next_bus():
     try:
-        table = get_bus_schedule()
-        time = table.iat[0, 0]
-        s1 = datetime.strptime(time, '%I:%M%p')
-        s2 = datetime.now()
-        FMT = '%H:%M:%S'
-        tdelta = s2 - s1
-        return(tdelta)
+        time = get_bus_schedule().iat[0, 0]
+        arrival_time = datetime.strptime(time, '%H:%M%p').strftime('%H:%M')
+        current_time = datetime.now().strftime('%H:%M')
+
+        print('arrival time: ', arrival_time)
+        print('current time: ', current_time)
+
+        delta = datetime.strptime(
+            arrival_time, '%H:%M') - datetime.strptime(current_time, '%H:%M')
+
+        return(delta)
+
     except AttributeError:
         return "No buses running"
 
 
 def main():
-    print(time_until_next_bus())
+    print('next bus arrives in: ', time_until_next_bus())
 
 
 if __name__ == "__main__":
