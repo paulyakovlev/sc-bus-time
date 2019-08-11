@@ -90,23 +90,25 @@ def remaining_time(seconds):
 
 
 def get_arrival_time(metro_df):
-    """Grab first element from the metro dataframe, which should be the soonest bus arrival time
+    """Grab soonest bus arrival time from the dataframe
     convert to 24 hour time if time is pm, and make change date to today
     input: pandas dataframe
     output: datetime object
     """
 
-    time = metro_df.iat[0, 0]
-    am_or_pm = time[-2:]
+    arrival_time = datetime.now()
 
-    #
-    arrival_time = datetime.strptime(time, '%H:%M%p')
-    arrival_time = arrival_time.replace(
-        year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
+    while(arrival_time <= datetime.now()):
+        time = metro_df.iat[0, 0]
+        am_or_pm = time[-2:]
 
-    # convert to 24 hour time if pm
-    if (am_or_pm == 'pm'):
-        arrival_time = arrival_time + timedelta(hours=12)
+        arrival_time = datetime.strptime(time, '%H:%M%p')
+        arrival_time = arrival_time.replace(
+            year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
+
+        # convert to 24 hour time if pm
+        if (am_or_pm == 'pm'):
+            arrival_time = arrival_time + timedelta(hours=12)
 
     return(arrival_time)
 
