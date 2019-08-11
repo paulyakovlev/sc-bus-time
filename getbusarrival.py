@@ -7,6 +7,8 @@ from time import sleep
 
 
 def get_bus_schedule():
+    """Retrieve the bus schedule for a given bus stop, put everything into pandas dataframe
+    output: pandas dataframe"""
 
     # currently looking at bus stop id 1232, but can be changed to others
     URL = "https://www.scmtd.com/en/stop/1232#tripDiv"
@@ -41,6 +43,9 @@ def get_bus_schedule():
 
 
 def time_until_next_bus(arrival_time):
+    """Display the countdown
+    input: datetime object"""
+
     try:
         current_time = datetime.now()
 
@@ -58,6 +63,10 @@ def time_until_next_bus(arrival_time):
 
 
 def get_delta(arrival, now):
+    """Calculate the time difference, convert to seconds
+    input: datetime object
+    output: datetime object"""
+
     delta = arrival - now
     delta = delta.days * 24 * 3600 + delta.seconds
 
@@ -65,20 +74,32 @@ def get_delta(arrival, now):
 
 
 def remaining_time(seconds):
+    """Calculate the remaining time
+    input: datetime object
+    output: datetime object"""
+
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
 
-    return (days, hours, minutes, seconds)
+    return (hours, minutes, seconds)
 
 
-def get_arrival_time(time):
-    time = time.iat[0, 0]
+def get_arrival_time(metro_df):
+    """Grab first element from the metro dataframe, which should be the soonest bus arrival time
+    convert to 24 hour time if time is pm, and make change date to today
+    input: pandas dataframe
+    output: datetime object"""
+
+    time = metro_df.iat[0, 0]
     am_or_pm = time[-2:]
+
+    #
     arrival_time = datetime.strptime(time, '%H:%M%p')
     arrival_time = arrival_time.replace(
         year=datetime.now().year, month=datetime.now().month, day=datetime.now().day)
 
+    # convert to 24 hour time if pm
     if (am_or_pm == 'pm'):
         arrival_time = arrival_time + timedelta(hours=12)
 
