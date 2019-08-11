@@ -55,7 +55,7 @@ def time_until_next_bus(arrival_time):
         print('current time: ', current_time)
 
         while (arrival_time > current_time):
-            print("%dd %dh %dm %ds" % remaining_time(
+            print("%dh %dm %ds" % remaining_time(
                 get_delta(arrival_time, current_time)))
             sleep(1)
             current_time = datetime.now()
