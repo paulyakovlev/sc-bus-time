@@ -6,15 +6,21 @@ from datetime import datetime
 
 
 def get_bus_schedule():
+
+    # currently looking at bus stop id 1232, but can be changed to others
     URL = "https://www.scmtd.com/en/stop/1232#tripDiv"
     r = requests.get(URL)
 
     soup = BeautifulSoup(r.content, 'html5lib')
+
+    # remove garbage information
     [s.extract() for s in soup('span', attrs={'class': 'detailsBelow'})]
     [s.extract() for s in soup('td', attrs={'class': 'request-details dim'})]
 
+    # locate the metro table
     table = soup.find('table', attrs={'class': 'metrotable'})
 
+    # load metro table to data frame
     bus_times_table = pd.DataFrame(columns=range(0, 5), index=range(0, 41))
     row_marker = 0
     try:
@@ -35,13 +41,17 @@ def get_bus_schedule():
 
 def time_until_next_bus():
     try:
+        # getting first entry for now, as it is the next upcoming bus
         time = get_bus_schedule().iat[0, 0]
+
+        # format the time
         arrival_time = datetime.strptime(time, '%H:%M%p').strftime('%H:%M')
         current_time = datetime.now().strftime('%H:%M')
 
         print('arrival time: ', arrival_time)
         print('current time: ', current_time)
 
+        # get difference
         delta = datetime.strptime(
             arrival_time, '%H:%M') - datetime.strptime(current_time, '%H:%M')
 
