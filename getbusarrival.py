@@ -41,9 +41,10 @@ def get_bus_schedule():
         print(bus_times_table)
         return(bus_times_table)
 
-    except AttributeError:
-        raise
-        return('No bus times!')
+    except:
+        message = "no bus times!"
+        print(message)            
+        print_on_display(message)
 
 
 def time_until_next_bus():
@@ -131,7 +132,7 @@ def print_on_display(message):
 
 
 def main():
-    time_until_next_bus(get_arrival_time(get_bus_schedule()))
+    time_until_next_bus()
 
 
 if __name__ == "__main__":
