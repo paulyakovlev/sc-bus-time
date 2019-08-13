@@ -28,6 +28,7 @@ def get_bus_schedule():
     # load metro table to data frame
     bus_times_table = pd.DataFrame(columns=range(0, 5), index=range(0, 41))
     row_marker = 0
+
     try:
         for row in table.find('tbody').find_all('tr'):
             column_marker = 0
@@ -42,31 +43,28 @@ def get_bus_schedule():
 
     except AttributeError:
         raise
+        return('No bus times!')
 
 
-def time_until_next_bus(arrival_time):
+def time_until_next_bus():
     """Display the countdown
     input: datetime object
     """
 
     try:
+        arrival_time = get_arrival_time(get_bus_schedule())
         current_time = datetime.now()
 
         print('arrival time: ', arrival_time)
         print('current time: ', current_time)
 
         while (arrival_time > current_time):
-            print("%dh %dm %ds" % remaining_time(
-                get_delta(arrival_time, current_time)))
-            sleep(1)
+            message = "%dh %dm %ds" % remaining_time(
+                get_delta(arrival_time, current_time))
+
+            print(message)            
+            print_on_display(message)
             
-            
-            lcd = Adafruit_CharLCD(rs=26, en=19,
-                       d4=13, d5=6, d6=5, d7=11,
-                       cols=16, lines=2)
-            lcd.clear()
-            lcd.message("%dh %dm %ds" % remaining_time(
-                get_delta(arrival_time, current_time)))
             sleep(1)
 
             current_time = datetime.now()
@@ -123,11 +121,17 @@ def get_arrival_time(metro_df):
 
     return(arrival_time)
 
+def print_on_display(message):
+    lcd = Adafruit_CharLCD(rs=26, en=19,
+    d4=13, d5=6, d6=5, d7=11,
+    cols=16, lines=2)
+
+    lcd.clear()
+    lcd.message(message)
 
 
 def main():
     time_until_next_bus(get_arrival_time(get_bus_schedule()))
-
 
 
 if __name__ == "__main__":
