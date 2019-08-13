@@ -1,6 +1,7 @@
 import csv
 import pandas as pd
 import requests
+from Adafruit_CharLCD import Adafruit_CharLCD
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, time
 from time import sleep
@@ -58,6 +59,16 @@ def time_until_next_bus(arrival_time):
             print("%dh %dm %ds" % remaining_time(
                 get_delta(arrival_time, current_time)))
             sleep(1)
+            
+            
+            lcd = Adafruit_CharLCD(rs=26, en=19,
+                       d4=13, d5=6, d6=5, d7=11,
+                       cols=16, lines=2)
+            lcd.clear()
+            lcd.message("%dh %dm %ds" % remaining_time(
+                get_delta(arrival_time, current_time)))
+            sleep(1)
+
             current_time = datetime.now()
 
     except AttributeError:
@@ -113,8 +124,10 @@ def get_arrival_time(metro_df):
     return(arrival_time)
 
 
+
 def main():
     time_until_next_bus(get_arrival_time(get_bus_schedule()))
+
 
 
 if __name__ == "__main__":
