@@ -13,7 +13,7 @@ def get_bus_schedule():
     """
 
     # currently looking at bus stop id 1232, but can be changed to others
-    URL = "https://www.scmtd.com/en/stop/1232#tripDiv"
+    URL = "https://www.scmtd.com/en/stop/1232/#tripDiv"
     r = requests.get(URL)
 
     soup = BeautifulSoup(r.content, 'html5lib')
@@ -26,7 +26,7 @@ def get_bus_schedule():
     table = soup.find('table', attrs={'class': 'metrotable'})
 
     # load metro table to data frame
-    bus_times_table = pd.DataFrame(columns=range(0, 5), index=range(0, 41))
+    bus_times_table = pd.DataFrame(columns=range(0, 5), index=range(0, 60))
     row_marker = 0
 
     try:
@@ -38,7 +38,7 @@ def get_bus_schedule():
                                     column_marker] = column.get_text()
                 column_marker += 1
             row_marker += 1
-        print(bus_times_table)
+
         return(bus_times_table)
 
     except:
@@ -52,27 +52,20 @@ def time_until_next_bus():
     input: datetime object
     """
 
-    try:
-        arrival_time = get_arrival_time(get_bus_schedule())
+    arrival_time = get_arrival_time(get_bus_schedule())
+    current_time = datetime.now()
+
+    print('arrival time: ', arrival_time)
+    print('current time: ', current_time)
+
+    while (arrival_time > current_time):
+        message = "Next bus in: \n %dh %dm %ds" % remaining_time(
+            get_delta(arrival_time, current_time))
+
+        print(message)            
+        print_on_display(message)
+        sleep(1)
         current_time = datetime.now()
-
-        print('arrival time: ', arrival_time)
-        print('current time: ', current_time)
-
-        while (arrival_time > current_time):
-            message = "%dh %dm %ds" % remaining_time(
-                get_delta(arrival_time, current_time))
-
-            print(message)            
-            print_on_display(message)
-            
-            sleep(1)
-
-            current_time = datetime.now()
-
-    except AttributeError:
-        return "No buses running"
-
 
 def get_delta(arrival, now):
     """Calculate the time difference, convert to seconds
@@ -104,6 +97,9 @@ def get_arrival_time(metro_df):
     convert to 24 hour time if time is pm, and make change date to today
     input: pandas dataframe
     output: datetime object
+
+    TODO: Currently the while loop  will go on infinitely if metro_df.iat[0, 0] holds a time
+    from tomorrow. 
     """
 
     arrival_time = datetime.now()
