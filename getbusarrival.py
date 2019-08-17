@@ -43,7 +43,7 @@ def get_bus_schedule():
 
     except:
         message = "no bus times!"
-        print(message)            
+        print(message)
         print_on_display(message)
 
 
@@ -62,10 +62,11 @@ def time_until_next_bus():
         message = "Next bus in: \n %dh %dm %ds" % remaining_time(
             get_delta(arrival_time, current_time))
 
-        print(message)            
+        print(message)
         print_on_display(message)
         sleep(1)
         current_time = datetime.now()
+
 
 def get_delta(arrival, now):
     """Calculate the time difference, convert to seconds
@@ -103,10 +104,13 @@ def get_arrival_time(metro_df):
     """
 
     arrival_time = datetime.now()
+    i = 0
 
     while(arrival_time <= datetime.now()):
-        time = metro_df.iat[0, 0]
+        print(arrival_time)
+        time = metro_df.iat[i, 0]
         am_or_pm = time[-2:]
+        i += 1
 
         arrival_time = datetime.strptime(time, '%H:%M%p')
         arrival_time = arrival_time.replace(
@@ -118,10 +122,11 @@ def get_arrival_time(metro_df):
 
     return(arrival_time)
 
+
 def print_on_display(message):
     lcd = Adafruit_CharLCD(rs=26, en=19,
-    d4=13, d5=6, d6=5, d7=11,
-    cols=16, lines=2)
+                           d4=13, d5=6, d6=5, d7=11,
+                           cols=16, lines=2)
 
     lcd.clear()
     lcd.message(message)
