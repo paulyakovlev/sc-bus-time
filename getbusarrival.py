@@ -59,13 +59,18 @@ def time_until_next_bus():
     print('current time: ', current_time)
 
     while (arrival_time > current_time):
+        delta = get_delta(arrival_time, current_time)
         message = "Next bus in: \n %dh %dm %ds" % remaining_time(
-            get_delta(arrival_time, current_time))
+            delta)
 
         print(message)
         print_on_display(message)
         sleep(1)
         current_time = datetime.now()
+
+        if(delta == 0):
+            arrival_time = get_arrival_time(get_bus_schedule())
+            current_time = datetime.now()
 
 
 def get_delta(arrival, now):
