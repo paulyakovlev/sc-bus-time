@@ -1,4 +1,4 @@
-## Santa Cruz Bus Time
+# Santa Cruz Bus Time
 
 ## Description
 This python script estimates the amount of time remaining until a bus arrives at your stop.
