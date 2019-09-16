@@ -1,4 +1,4 @@
-## Santa Cruz Metro Bus ETA
+## Santa Cruz Bus Time
 
 ## Description
 This python script estimates the amount of time remaining until a bus arrives at your stop.
@@ -16,7 +16,7 @@ sudo pip install adafruit-charlcd
 To run this project, simply clone the repo and run the Python script.
 
 ```
-$ git clone https://github.com/paulyakovlev/sc-metro-bus-eta
-$ cd sc-metro-bus-eta
-$ python getbusarrival.py
+$ git clone https://github.com/paulyakovlev/sc-bus-time.git
+$ cd sc-bus-time
+$ python bustime.py
 ```
