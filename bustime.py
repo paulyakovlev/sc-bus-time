@@ -107,7 +107,7 @@ def get_arrival_time(metro_df):
     output: datetime object
 
     TODO: Currently the while loop  will go on infinitely if metro_df.iat[0, 0] holds a time
-    from tomorrow. 
+    from tomorrow.
     """
 
     arrival_time = datetime.now()
@@ -130,13 +130,13 @@ def get_arrival_time(metro_df):
     return(arrival_time)
 
 
-# def print_on_display(message):
-#    lcd = Adafruit_CharLCD(rs=26, en=19,
-#                           d4=13, d5=6, d6=5, d7=11,
-#                           cols=16, lines=2)
-#
-#    lcd.clear()
-#    lcd.message(message)
+def print_on_display(message):
+    lcd = Adafruit_CharLCD(rs=26, en=19,
+                           d4=13, d5=6, d6=5, d7=11,
+                           cols=16, lines=2)
+
+    lcd.clear()
+    lcd.message(message)
 
 
 def main():
