@@ -1,6 +1,7 @@
 import csv
 import pandas as pd
 import requests
+import sys
 from Adafruit_CharLCD import Adafruit_CharLCD
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, time
@@ -12,8 +13,9 @@ def get_bus_schedule():
     output: pandas dataframe
     """
 
-    # currently looking at bus stop id 1232, but can be changed to others
-    URL = "https://www.scmtd.com/en/stop/1232/#tripDiv"
+    # bus stop number is received via command line argument
+    stop = sys.argv[1]
+    URL = 'https://www.scmtd.com/en/stop/' + stop + '/#tripDiv'
     r = requests.get(URL)
 
     soup = BeautifulSoup(r.content, 'html5lib')
@@ -128,13 +130,13 @@ def get_arrival_time(metro_df):
     return(arrival_time)
 
 
-def print_on_display(message):
-    lcd = Adafruit_CharLCD(rs=26, en=19,
-                           d4=13, d5=6, d6=5, d7=11,
-                           cols=16, lines=2)
-
-    lcd.clear()
-    lcd.message(message)
+# def print_on_display(message):
+#    lcd = Adafruit_CharLCD(rs=26, en=19,
+#                           d4=13, d5=6, d6=5, d7=11,
+#                           cols=16, lines=2)
+#
+#    lcd.clear()
+#    lcd.message(message)
 
 
 def main():
