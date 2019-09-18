@@ -15,7 +15,7 @@ def get_bus_schedule():
 
     # bus stop number is received via command line argument
     stop = sys.argv[1]
-    URL = 'https://www.scmtd.com/en/stop/' + stop + '/#tripDiv'
+    URL = 'https://www.scmtd.com/en/stop/' + stop
     r = requests.get(URL)
 
     soup = BeautifulSoup(r.content, 'html5lib')
